@@ -1,0 +1,36 @@
+// @maxWidth: 768px;
+@maxWidth: 100%;
+
+.setImg{
+	img{
+		width: 100%;
+		height: auto;
+	}
+}
+
+.setPTB{
+    padding-top: 0.27rem;
+    padding-bottom: 0.27rem;
+}
+
+.setPLR{
+	padding-left: 0.32rem;
+	padding-right: 0.32rem;
+}
+
+// 使用position: fixed都需要添加.setMaxW;
+.setMaxW{
+	max-width: @maxWidth;
+	// left: 50%!important;
+	// transform: translateX(-50%);
+}  
+
+.cleanDefStyle{
+	margin: 0;
+	padding: 0;
+	border: 1px solid rgba(255,255,255,0);
+	background: none;
+	appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+}
