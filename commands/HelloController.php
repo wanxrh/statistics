@@ -41,41 +41,44 @@ class HelloController extends Controller
         $json = file_get_contents(urldecode($src));
         $json = json_decode($json);
         //print_r($json);exit;
-        foreach($json->data as $k=>$item){
-            //echo 54545;exit;
-            //先查询数据库有没有
+        if(!empty($json->data)){
+            foreach($json->data as $k=>$item){
+                //echo 54545;exit;
+                //先查询数据库有没有
 
 
-            $kj_one = Yii::$app->db->createCommand("SELECT * FROM xy_data WHERE `number`='{$item->expect}'")->queryOne();
-            //print_r($kj_one);exit;
-            if(empty($kj_one)){
-                //当前数据库连接
-                $db = Yii::$app->db;
-                //生成命令查询器 这里其实可以直接根据 sql 进行构造
-                $command = $db->createCommand();
-                //单条插入
-                $command->insert('xy_data', [
-                    'type'=>'1',
-                    'time'=>$item->opentime,
-                    'number'=>$item->expect,
-                    'data'=>$item->opencode,
-                ]);
-                $result_insert = $command->execute();
-                if($result_insert){
-                    echo "插入成功".PHP_EOL;
+                $kj_one = Yii::$app->db->createCommand("SELECT * FROM xy_data WHERE `number`='{$item->expect}'")->queryOne();
+                //print_r($kj_one);exit;
+                if(empty($kj_one)){
+                    //当前数据库连接
+                    $db = Yii::$app->db;
+                    //生成命令查询器 这里其实可以直接根据 sql 进行构造
+                    $command = $db->createCommand();
+                    //单条插入
+                    $command->insert('xy_data', [
+                        'type'=>'1',
+                        'time'=>$item->opentime,
+                        'number'=>$item->expect,
+                        'data'=>$item->opencode,
+                    ]);
+                    $result_insert = $command->execute();
+                    if($result_insert){
+                        echo "插入成功".PHP_EOL;
+                    }
+
+                    //$result = Yii::$app->db->createCommand()->insert("xy_data",array(
+                    //    'type'=>'1',
+                    //    'time'=>$item->opentime,
+                    //    'number'=>$item->expect,
+                    //    'data'=>$item->opencode,
+                    //))->execute();
+                    //if($result){
+                    //    echo "插入成功".PHP_EOL;
+                    //}
                 }
-
-                //$result = Yii::$app->db->createCommand()->insert("xy_data",array(
-                //    'type'=>'1',
-                //    'time'=>$item->opentime,
-                //    'number'=>$item->expect,
-                //    'data'=>$item->opencode,
-                //))->execute();
-                //if($result){
-                //    echo "插入成功".PHP_EOL;
-                //}
             }
         }
+
 
     }
 
