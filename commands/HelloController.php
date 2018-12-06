@@ -35,69 +35,48 @@ class HelloController extends Controller
 
         return ExitCode::OK;
     }
-
-    /**
-     * 跑脚本统计数量
-     * @author lvlinlin <lvlinlin@tdnnic.org>
-     */
-    public function actionSum(){
-
-        $db = Yii::$app->db_analysis;
-        $time = ['本月','半年','一年'];
-        foreach($time as $value){
-            switch($value){
-                case '本月':
-                    $query = new Query();
-                    $start_date = date('Y-m-d',mktime(0, 0, 0, date('m'), 1, date('Y')));
-                    $end_date = date('Y-m-d',mktime(23, 59, 59, date('m'), date('t'), date('Y')));
-                    $query->select('`id`,`domain_name`,count(`id`) as num')->where("is_crawler=0")->from(AnalysisLog::tableName());
+    public function actionGetApi(){
+        $src = 'http://f.apiplus.net/bjpk10.json';
+        $src .= '?_='.time();
+        $json = file_get_contents(urldecode($src));
+        $json = json_decode($json);
+        //print_r($json);exit;
+        foreach($json->data as $k=>$item){
+            //echo 54545;exit;
+            //先查询数据库有没有
 
 
-                    $query->andWhere("created_at >= '{$start_date} 00:00:00' and created_at <= '{$end_date} 23:59:59'");
+            $kj_one = Yii::$app->db->createCommand("SELECT * FROM xy_data WHERE `number`='{$item->expect}'")->queryOne();
+            //print_r($kj_one);exit;
+            if(empty($kj_one)){
+                //当前数据库连接
+                $db = Yii::$app->db;
+                //生成命令查询器 这里其实可以直接根据 sql 进行构造
+                $command = $db->createCommand();
+                //单条插入
+                $command->insert('xy_data', [
+                    'type'=>'1',
+                    'time'=>$item->opentime,
+                    'number'=>$item->expect,
+                    'data'=>$item->opencode,
+                ]);
+                $result_insert = $command->execute();
+                if($result_insert){
+                    echo "插入成功".PHP_EOL;
+                }
 
-                    $count = $query->count('id', $db);
-                    $query->groupBy("domain_name");
-                    $count2= $query->count('id',$db);
-                    Yii::$app->db_analysis->createCommand()->update('sum_tmp', ['month_sum' => $count,'month_page_sum'=>$count2])->execute();
-                    break;
-                case '半年':
-                    $query2 = new Query();
-                    $start_date2 = date("Y-m-d", strtotime("-6 month"));
-                    $end_date2 = date("Y-m-d",time());
-                    $query2->select('`id`,`domain_name`,count(`id`) as num')->where("is_crawler=0")->from(AnalysisLog::tableName());
-
-
-                    $query2->andWhere("created_at >= '{$start_date2} 00:00:00' and created_at <= '{$end_date2} 23:59:59'");
-
-                    $count2 = $query2->count('id', $db);
-                    $query2->groupBy("domain_name");
-                    $count2_1= $query2->count('id',$db);
-                    Yii::$app->db_analysis->createCommand()->update('sum_tmp', ['half_year_sum' => $count2,'half_year_page_sum'=>$count2_1])->execute();
-                    break;
-                case '一年':
-                    $query3 = new Query();
-                    $start_date3 = date("Y-m-d", strtotime("-1 year"));
-                    $end_date3 = date("Y-m-d",time());
-                    $query3->select('`id`,`domain_name`,count(`id`) as num')->where("is_crawler=0")->from(AnalysisLog::tableName());
-
-
-                    $query3->andWhere("created_at >= '{$start_date3} 00:00:00' and created_at <= '{$end_date3} 23:59:59'");
-
-                    $count3 = $query3->count('id', $db);
-                    $query3->groupBy("domain_name");
-                    $count3_1= $query3->count('id',$db);
-                    Yii::$app->db_analysis->createCommand()->update('sum_tmp', ['year_sum' => $count3,'year_page_sum'=>$count3_1])->execute();
-                    break;
-                default:
-                    $start_date = date("Y-m-d",time());
-                    $end_date = date("Y-m-d",time());
-                    break;
+                //$result = Yii::$app->db->createCommand()->insert("xy_data",array(
+                //    'type'=>'1',
+                //    'time'=>$item->opentime,
+                //    'number'=>$item->expect,
+                //    'data'=>$item->opencode,
+                //))->execute();
+                //if($result){
+                //    echo "插入成功".PHP_EOL;
+                //}
             }
-
         }
-        echo 'success';
-
-
 
     }
+
 }
