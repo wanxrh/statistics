@@ -41,21 +41,6 @@ class HelloController extends Controller
         $json = file_get_contents(urldecode($src));
         $json = json_decode($json);
         //print_r($json);exit;
-        $db = Yii::$app->db;
-        //生成命令查询器 这里其实可以直接根据 sql 进行构造
-        $command = $db->createCommand();
-        //单条插入
-        $number = rand(999999,7);
-        $command->insert('xy_data', [
-            'type'=>'1',
-            'time'=>'2018-12-06 23:52:20',
-            'number'=>$number,
-            'data'=>'09,03,08,06,01,05,10,07,04,02',
-        ]);
-        $result_insert = $command->execute();
-        if($result_insert){
-            echo "插入成功".PHP_EOL;
-        }
         if(!empty($json->data)){
             foreach($json->data as $k=>$item){
                 //echo 54545;exit;
