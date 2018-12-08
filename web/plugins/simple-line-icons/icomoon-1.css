@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'icomoon-1';
+    src:    url('fonts/icomoon-1.eot?5r9o0m');
+    src:    url('fonts/icomoon-1.eot?5r9o0m#iefix') format('embedded-opentype'),
+        url('fonts/icomoon-1.ttf?5r9o0m') format('truetype'),
+        url('fonts/icomoon-1.woff?5r9o0m') format('woff'),
+        url('fonts/icomoon-1.svg?5r9o0m#icomoon-1') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-dd"], [class*=" icon-dd"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon-1' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-dd1:before {
+    content: "\e900";
+}
+

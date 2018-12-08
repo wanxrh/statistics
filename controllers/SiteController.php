@@ -67,7 +67,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render("index");
+        $period = Yii::$app->request->get('period','50');
+        $querylist = new Query();
+        $querylist->select('*')->from('xy_data');
+        $querylist->orderBy('id desc');
+        $count = $querylist->count();
+        $pages = new Pagination(['defaultPageSize' => $period, 'totalCount' => $count]);
+        $querylist->offset($pages->offset)->limit($pages->limit);
+        $data = $querylist->all();
+        return $this->render("index",[
+            'data'=>$data,
+            'pages'=>$pages,
+            'period'=>$period,
+        ]);
 
     }
 

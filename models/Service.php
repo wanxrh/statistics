@@ -50,4 +50,21 @@ class Service
         }
         return $keysvalue;
     }
+    /**
+     * @param $up
+     * @param 每个位置出现的14710次数
+     * @param $current
+     */
+    public static function Kill_number($current){
+        //号码
+        $kj = ['01', '04', '07', '10'];
+        if(array_intersect($current,$kj)){
+            return true;
+        }else{
+            return false;
+        }
+
+
+
+    }
 }

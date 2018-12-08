@@ -19,10 +19,8 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-    <script type="text/javascript" src="/js/vue.min.js"></script>
-    <script type="text/javascript" src="/js/vuex.js"></script>
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title>统计</title>
     <?php $this->head() ?>
 </head>
 <body>

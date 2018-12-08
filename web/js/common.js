@@ -1,312 +1,207 @@
-'use strict';
 
-// 全局ajax
-function defaultAjax(csrf) {
-    $.ajaxSetup({
-        data: {
-            _csrf: csrf
+var unreadIntval;
+var unread_ok = false;
+$(function(){
+    var notification = $.cookie('notification');
+    if (notification > 0) {
+        $('#notification_num').text(notification).show();
+    }
+    _beat_unread_count(5);
+    $('.cn_more').click(function(event) {
+        var flag = $(this).attr('data-id');
+        if (flag=='zhan') {
+            $(this).attr('data-id','shou');
+            $(this).html('收起&nbsp;<i class="icon-chevron-up"></i>');
+            $(this).prev().css('height', 'auto');
+        }else if(flag=='shou'){
+            $(this).attr('data-id','zhan');
+            $(this).html('展开&nbsp;<i class="icon-chevron-down"></i>');
+            $(this).prev().css('height', '20px');
         }
     });
-}
 
-function _photoSwipe() {
-}
-// _photoSwipe();
-
-function init() {
-    var winW = document.documentElement.clientWidth;
-    var maxW = 768;
-    if (winW <= maxW) {
-        document.documentElement.style.fontSize = winW / 7.5 + 'px';
-    } else {
-        document.documentElement.style.fontSize = maxW / 7.5 + 'px';
-    }
-}
-init();
-window.addEventListener('resize', init);
-
-// $('head link').each(function () {
-//     var has_v = $(this).attr('href').split("?").length < 2;
-//     var _v = '1.0.1';
-//     var _url = $(this).attr("href") + '?' + _v;
-//     if (has_v) {
-//         $(this).attr("href",_url);
-//     }
-// })
-
-$(function () {
-    // var ap = navigator.userAgent.toLowerCase();
-    // if (/iphone|ipad|ipod/.test(ap)) {
-            $('input:text,input[type="number"],input[type="tel"],textarea,select').bind('focus', function () {
-                $(".menu").css({display: "none"});
-            });
-            
-            $('input:text,input[type="number"],input[type="tel"],textarea,select').bind('blur', function () {
-                $(".menu").css({display: "flex"});
-            });
-        // }
-})
-
-// 验证方式
-// 例子：validate.isPhone('13488888888', '手机格式错误')
-var validate = {
-    isPhone: function isPhone(val, text) {
-        // 手机号码验证
-        var _phone = /^(?:13\d|15\d|18\d|17\d)\d{5}(\d{3}|\*{3})$/;
-        if (!_phone.test(val)) {
-            console.log('isPhone');
-            layer.open({
-                content: text,
-                skin: 'msg',
-                time: 3
-            });
-            return false;
-        }
-        return true;
-    },
-    isTel: function isTel(val, text) {
-        // 座机号验证
-        var _tel = /^((0\d{2,3})-)?(\d{7,8})(-(\d{3,}))?$/;
-        if (!_tel.test(val)) {
-            console.log('isTel');
-            layer.open({
-                content: text,
-                skin: 'msg',
-                time: 3
-            });
-            return false;
-        }
-        return true;
-    },
-    isEmail: function isEmail(val, text) {
-        // 邮件验证
-        var _reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/;
-        if (!_reg.test(val)) {
-            console.log('isEmail');
-            layer.open({
-                content: text,
-                skin: 'msg',
-                time: 3
-            });
-            return false;
-        }
-        return true;
-    },
-    isPostcode: function isPostcode(val, text) {
-        // 邮政编码验证
-        var _postcode = /^[0-9]{6}$/;
-        if (!_postcode.test(val)) {
-            console.log('isPostcode');
-            layer.open({
-                content: text,
-                skin: 'msg',
-                time: 3
-            });
-            return false;
-        }
-        return true;
-    },
-    isIdCard: function isIdCard(val, text) {
-        // 身份证验证
-        var _idcard = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-        if (!_idcard.test(val)) {
-            console.log('isIdCard');
-            layer.open({
-                content: text,
-                skin: 'msg',
-                time: 3
-            });
-            return false;
-        }
-        return true;
-    }
-};
-
-function setSelect() {
-    // 例：
-    // <select class="select-hook"></select>
-    if (navigator.userAgent.match(/mobile/i)) {
-        $(".select-hook").each(function () {
-            var el = $('<span class="selectVal-hook"></span>').text($(this).find('option:selected').text());
-            if ($(this).siblings('.selectVal-hook').length > 0) {
-                $(this).siblings('.selectVal-hook').text($(this).find('option:selected').text());
-            } else {
-                $(this).after(el);
-            }
-        });
-        $(".select-hook").on("change", function () {
-            $(this).siblings('.selectVal-hook').text($(this).find('option:selected').text());
-        });
-    } else {
-        $(".select-hook").addClass("ispc");
-    }
-}
-
-function setCheckbox() {
-    $(".checkbox-hook").each(function () {
-        if ($(this).find(":checked").length) {
-            $(this).addClass("active");
+    //全选和取消全选
+    $('.checkAll').click(function() {
+        if (true == this.checked) {
+            $(".checkOne").attr('checked', true);
+            $('.checkOne').closest('span').addClass('checked');
+        }else{
+            $(".checkOne").attr('checked', false);
+            $('.checkOne').closest('span').removeClass('checked');
         }
     });
-    $(".checkbox-hook").on("change", function () {
-        if ($(this).find(":checked").length) {
-            $(this).addClass("active");
-        } else {
-            $(this).removeClass("active");
-        }
-    });
-}
 
-function isVal() {
-    // 例：
-    // <div class="line-hook">
-    //      <div class="line-left-hook"></div>
-    //      <input class="line-right-hook">
-    // </div>
-    var returnVal;
-    $(".line-hook .line-right-hook").each(function () {
-        if (!!$(this).val() == '') {
-            console.log('isVal', $(this).hasClass("select-hook"));
-            if ($(this).hasClass("select-hook")) {
-                console.log("has");
-            }
-            var titleText = $(this).parents('.line-hook').find('.line-left-hook').text();
-            var test = $(this).parents('.line-hook');
-            returnVal = false;
-            layer.open({
-                content: $.trim(titleText) + '不能为空',
-                skin: 'msg',
-                time: 3
-            });
-            return false;
-        } else {
-            returnVal = true;
-        }
-    });
-    return returnVal;
-}
-
-// 全局菜单组件
-Vue.component("menu-com", {
-    template: '<div class="menu">\n            <a :class="{active:active == 0}" href="/site/index" class="menu-item menu-home">\n                <i class="item-icon">\n                </i>\n                <span class="item-text">\u9996\u9875</span>\n            </a>\n            <a :class="{active:active == 1}" href="/service/index" class="menu-item menu-service">\n                <i class="item-icon">\n                </i>\n                <span class="item-text">\u5BA2\u670D</span>\n            </a>\n            <a :class="{active:active == 2}" href="/cart/index" class="menu-item menu-shop">\n                <i class="item-icon">\n                </i>\n                <i class="numb" v-show="fill">{{fill}}</i>\n                <span class="item-text">\u6CE8\u518C\u5217\u8868</span>\n            </a>\n            <a :class="{active:active == 3}" href="/user/index" class="menu-item menu-user">\n                <i class="item-icon">\n                </i>\n                <i class="numb_my" v-show="numb_my"></i>\n               <span class="item-text">\u6211\u7684</span>\n            </a>\n        </div>',
-    data: function data() {
-        return {
-            fill: 0,
-            numb_my:false,
-            service_num:0
-        
-        };
-    },
-    props: {
-        active: Number, //传值0~3，对应的active
-        num: null
-    },
-    created: function created() {
-        var _this = this;
-        $.ajax({
-            type: 'GET',
-            url: '/cart/get-count',
-            success: function(data){
-                var data = JSON.parse(data);
-                console.log(data);
-                if (data.code !== 1) {
-                    _this.fill = 0;
-                    _this.numb_my = false;
-                    _this.service_num = 0;
-                    
-                } else{
-                    _this.fill = parseInt(data.count);
-                    _this.service_num = parseInt(data.service_count);
-                    if(data.my_count<1){
-                        console.log(data.my_count)
-                        _this.numb_my = false;
-                    }else{
-                        _this.numb_my = true;
-                    }
-                }
-            },
-            error:function(err){
-                _this.fill = 0;
-                _this.service_num = 0;
-            }
-        });
-        
-    },
-   
-    methods: {
-        // 加入注册列表购物车+1
-        numAdd:function numAdd() {
-            var _this=this;
-            _this.fill++
-        }
-    }
 });
 
-// 全局搜索组件
-Vue.component("search-com", {
-    template: '<div class="searchHead">\n            <div class="head-main">\n                <i class="webIcon-search">\n                    <img src="/images/index/icon_search.png" alt="">\n                </i>\n                <div class="main-content">\n                    <input class="searchText" type="text" name="" v-model="searchText" placeholder="\u641C\u7D22\u6216\u8F93\u5165\u7F51\u7AD9\u540D\u79F0">\n                </div>\n                <i class="webIcon-refresh">\n                    <img src="/images/index/icon_refresh.png" alt="">\n                </i>\n            </div>\n        </div>',
-    data: function data() {
-        return {
-            searchText: ''
-        };
-    }
-});
+function _beat_unread_count(time)
+{
+    //priceIntval = setInterval(function(){
+    //    _get_update_notification()
+    //}, time*1000);
+}
 
-// 全局标题组件
-Vue.component("navber-com", {
-    template: '<div class="navber">\n            <div class="navber-left" @click="goBack">\n                <img src="/images/icon_back.png">\n            </div>\n            <div class="navber-center">{{title}}</div>\n            <div class="navber-right">\n            </div>\n        </div>',
-    props: {
-        title: '', // 标题内容
-        gobackurl: '' // 返回的连接
-    },
-    methods: {
-        goBack: function goBack() {
-            if (this.gobackurl) {
-                window.location.href = this.gobackurl;
-            } else {
-                history.go(-1);
+function _get_update_notification()
+{
+    if (unread_ok == true) return;
+    unread_ok = true;
+    $.ajax({
+        type: 'POST',
+        url: '/notification/update',
+        data: {},
+        dataType:'json',
+        success:  function(json){
+        		if (json.info != 'ok')
+            {
+                return false;
+            }
+            unread_ok = false;
+            var data = json.data;
+            if (data['num'] > 0) {
+            		$('#notification_num').text(data['num']).show();
             }
         }
+    });
+}
+/**长度**/
+function getBytesLen(val){
+    var len=0;
+    for (var i = 0; i < val.length; i++)
+    {
+        len = len + ((val.charCodeAt(i) >= 0x4e00 && val.charCodeAt(i) <= 0x9fa5) ? 3 : 1);
     }
-});
+    return len;
+}
+/**
+ * 通用弹窗
+ * @param r
+ * @param url
+ */
+function common_layer(r,url){
+    var layerc = layer.open({
+        title:['信息提示'],
+        area: '400px',
+        border: [1, 0.3, '#ccc'],
+        shade: [0.5, '#000'],
+        content:r,
+        btn:['确定'],
+        yes: function(){
+            if(url=='' || url==undefined){
+                layer.close(layerc);
+            }else{
+                location.href= encodeURI(url);
+            }
+        }
 
-// 全局图片查看组件
-/*Vue.component("photo-swipe", {
-    template: `<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="pswp__bg"></div>
-        <div class="pswp__scroll-wrap">
-            <div class="pswp__container">
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-            </div>
-            <div class="pswp__ui pswp__ui--hidden">
-                <div class="pswp__top-bar">
-                    <div class="pswp__counter"></div>
-                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                    <button class="pswp__button pswp__button--share" title="Share"></button>
-                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-                    <div class="pswp__preloader">
-                        <div class="pswp__preloader__icn">
-                          <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                    <div class="pswp__share-tooltip"></div> 
-                </div>
-                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                </button>
-                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                </button>
-                <div class="pswp__caption">
-                    <div class="pswp__caption__center"></div>
-                </div>
-            </div>
-        </div>
-    </div>`,
-    methods: {}
-});*/
+    });
+}
+
+
+
+
+
+//一堆检查字符合法性的JS
+
+function checkFloat(str)
+{
+
+  return /^([1-9]\d*|0)(\.\d+)|\d+$/g.test(str);
+
+}
+
+function checkInt(str)
+
+{
+
+  return /^\d+$/g.test(str);
+
+}
+
+function trim(str)
+
+{
+
+  return str.replace(/(^\s*)|(\s*$)/g,"");
+
+}
+
+function Lrim(str)
+
+{
+
+  return str.replace(/(^\s*)/g,"");
+
+}
+
+function Rrim(str)
+
+{
+
+  return str.replace(/(\s*$)/g,"");
+
+}
+
+function checkDate(str)
+
+{
+
+  return /^[1-2]\d{3}-(0[1-9]||1[0-2])-([0-2]\d||3[0-1])$/g.test(str);
+
+}
+
+function checkTime(str)
+
+{
+
+  return /^[1-2]\d{3}-(0[1-9]||1[0-2])-([0-2]\d||3[0-1]) ([0-1][0-9]||2[0-3]):([0-5][0-9]):([0-5][0-9])$/g.test(str);
+
+}
+
+function checkC(str)
+
+{
+
+  return /^[a-zA-Z_]+[a-zA-Z0-9_]*$/g.test(str);
+
+}
+
+function checkPhone(str)
+
+{
+
+  if(!str)return false;
+
+  return /^(([0\+]\d{2,3}-)?(0\d{2,3})-)?(\d{7,8})(-(\d{3,}))?$/.test(str);
+
+}
+
+function checkMobile(str)
+
+{
+
+  if(!str)return false;
+
+  return /^1[3|4|5|8][0-9]\d{4,8}$/.test(str);
+
+}
+
+function checkEmail(str)
+
+{
+
+  if(!str)return false;
+
+  return /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test(str);
+
+}
+
+
+/**
+  @Description: 只能输入小数点和数字,需要绑定onKeyup
+  @Author:      Dong
+  @DateTime:    2015-10-30 13:43:28
+ */
+function onlyFloat (thisObj) {
+  var oldVal = $(thisObj).val();
+  var newVal = oldVal.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+  $(thisObj).val(newVal);
+}
