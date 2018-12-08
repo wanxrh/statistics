@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="portlet-body form">
-                <form class="form-inline" role="form" method="get" action="<?php echo Yii::$app->urlManager->createUrl('site/index');?>">
+                <form class="form-inline" role="form" method="get" action="">
                     <div class="form-body">
                         <div class="form-group">
                             <select  name="period" class="form-control input-small">
