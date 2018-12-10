@@ -67,4 +67,20 @@ class Service
 
 
     }
+    public static function xml_to_json($source) {
+        if(is_file($source)){ //传的是文件，还是xml的string的判断
+            $xml_array=simplexml_load_file($source);
+        }else{
+            $xml_array=simplexml_load_string($source);
+        }
+        $json = json_encode($xml_array); //php5，以及以上，如果是更早版本，请查看JSON.php
+        return $json;
+    }
+    public static function xmlToArray($xml)
+    {
+        //禁止引用外部xml实体
+        libxml_disable_entity_loader(true);
+        $values = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+        return $values;
+    }
 }

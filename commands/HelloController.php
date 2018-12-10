@@ -36,19 +36,19 @@ class HelloController extends Controller
         return ExitCode::OK;
     }
     public function actionGetApi(){
-        $src = 'http://f.apiplus.net/bjpk10.json';
-        //$src = 'http://e.apiplus.net/newly.do?token=t687d5a65d3b303c3k&code=bjpk10&format=json';
+        //$src = 'http://f.apiplus.net/bjpk10.json';
+        $src = 'http://e.apiplus.net/newly.do?token=t687d5a65d3b303c3k&code=bjpk10&format=json';
         $src .= '?_='.time();
         $json = file_get_contents(urldecode($src));
-        $json = json_decode($json);
-        //print_r($json);exit;
-        if(!empty($json->data)){
-            foreach($json->data as $k=>$item){
+        //$json = json_decode($json);
+
+        $json_data = Service::xmlToArray($json);
+        //print_r($json_data['row'][0]);exit;
+        if(!empty($json_data['row'])){
+            foreach($json_data['row'] as $k=>$item){
                 //echo 54545;exit;
                 //先查询数据库有没有
-
-
-                $kj_one = Yii::$app->db->createCommand("SELECT * FROM xy_data WHERE `number`='{$item->expect}'")->queryOne();
+                $kj_one = Yii::$app->db->createCommand("SELECT * FROM xy_data WHERE `number`='{$item['@attributes']['expect']}'")->queryOne();
                 //print_r($kj_one);exit;
                 if(empty($kj_one)){
                     //当前数据库连接
@@ -58,9 +58,9 @@ class HelloController extends Controller
                     //单条插入
                     $command->insert('xy_data', [
                         'type'=>'1',
-                        'time'=>$item->opentime,
-                        'number'=>$item->expect,
-                        'data'=>$item->opencode,
+                        'time'=>$item['@attributes']['opentime'],
+                        'number'=>$item['@attributes']['expect'],
+                        'data'=>$item['@attributes']['opencode'],
                     ]);
                     $result_insert = $command->execute();
                     if($result_insert){
