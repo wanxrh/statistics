@@ -36,7 +36,8 @@ class HelloController extends Controller
         return ExitCode::OK;
     }
     public function actionGetApi(){
-        $src = 'http://f.apiplus.net/bjpk10.json';
+        //$src = 'http://f.apiplus.net/bjpk10.json';
+        $src = 'http://e.apiplus.net/newly.do?token=t687d5a65d3b303c3k&code=bjpk10&format=json';
         $src .= '?_='.time();
         $json = file_get_contents(urldecode($src));
         $json = json_decode($json);
