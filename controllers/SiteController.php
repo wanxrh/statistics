@@ -70,7 +70,7 @@ class SiteController extends Controller
         $period = Yii::$app->request->get('period','50');
         $querylist = new Query();
         $querylist->select('*')->from('xy_data');
-        $querylist->orderBy('id desc');
+        $querylist->orderBy('number desc');
         $count = $querylist->count();
         $pages = new Pagination(['defaultPageSize' => $period, 'totalCount' => $count]);
         $querylist->offset($pages->offset)->limit($pages->limit);
