@@ -72,7 +72,7 @@ class SiteController extends Controller
         $querylist->select('*')->from('xy_data');
         $querylist->orderBy('number desc');
         $count = $querylist->count();
-        $pages = new Pagination(['defaultPageSize' => $period, 'totalCount' => $count]);
+        $pages = new Pagination(['defaultPageSize' => 50, 'totalCount' => $count,'pageSizeLimit'=>$period]);
         $querylist->offset($pages->offset)->limit($pages->limit);
         $data = $querylist->all();
         return $this->render("index",[

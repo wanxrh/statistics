@@ -37,6 +37,7 @@ class HelloController extends Controller
     }
     public function actionGetApi(){
         //$src = 'http://f.apiplus.net/bjpk10.json';
+        //$src = 'https://kj.13322.com/trend/pk10.findIssueInfo.do';
         $src = 'http://e.apiplus.net/newly.do?token=t687d5a65d3b303c3k&code=bjpk10&format=json';
         $src .= '?_='.time();
         $json = file_get_contents(urldecode($src));
