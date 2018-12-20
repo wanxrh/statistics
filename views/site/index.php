@@ -73,6 +73,7 @@
                         </th>
                         <th>前三和值</th>
                         <th>杀09和尾+62527和值</th>
+                        <th>形态</th>
 
 
                     </tr>
@@ -106,6 +107,8 @@
                                 ?>
                                 <td><i class="icon-ok ">x</i></td>
                             <?php }?>
+
+                                <td><?php echo \app\models\Service::xingtai([$kj_number[0],$kj_number[1],$kj_number[2]])?></td>
                             </tr>
                         <?php } ?>
                     <?php } else {

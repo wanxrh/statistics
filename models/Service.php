@@ -120,6 +120,23 @@ class Service
         return $shunzi;
     }
     /**
+     * @param $a
+     * @return 下山号 上山号
+     * @author lvlinlin <lvlinlin@tdnnic.org>
+     */
+    public static function xingtai($a){
+        if ($a[0]<$a[1] && $a[1]<$a[2]) {
+            $shunzi = '上山号';
+        } else {
+            if ($a[0]>$a[1] && $a[1]>$a[2]) {
+                $shunzi = '下山号';
+            } else {
+                $shunzi = '其他';
+            }
+        }
+        return $shunzi;
+    }
+    /**
      * @param $source
      * @return string
      * @author lvlinlin <lvlinlin@tdnnic.org>
