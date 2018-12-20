@@ -13,6 +13,7 @@
     .span{width: 50px; display: block;float: left;text-align: center}
     .color{ color: #b3b3b3;text-align: center;}
     td{text-align: center}
+    .container{width: 80%}
 </style>
 <div class="row">
     <div class="col-md-12">
@@ -69,9 +70,8 @@
 
                         <th colspan="10">开奖号码
                         </th>
-                        <th>
-                            是否中奖
-                        </th>
+                        <th>前三和值</th>
+                        <th>杀09和尾+62527和值</th>
 
 
                     </tr>
@@ -93,10 +93,17 @@
                                         <td width="5%"><?php echo $val?></td>
                                     <?php }?>
                                 <?php };?>
-                            <?php if(\app\models\Service::Kill_number($kj_number)){?>
+                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','09','10','19','20','25','27']?>
+                                <td><?php echo $hezhi?></td>
+                            <?php if(\app\models\Service::shunza([$kj_number[0],$kj_number[1],$kj_number[2]])){$shunzi[] = 0;}else{$shunzi[] = 1;}?>
+                            <?php if(!in_array($hezhi,$hewei)){
+                                $arr[] = 1;
+                                ?>
                                 <td><i class="icon-ok ">√</i></td>
-                            <?php }else{?>
-                                <td>×</td>
+                            <?php }else{
+                                $arr[] = 0;
+                                ?>
+                                <td><i class="icon-ok ">x</i></td>
                             <?php }?>
                             </tr>
                         <?php } ?>
@@ -107,7 +114,23 @@
                             <td align="center" colspan="12" class="no_record" style="display: table-cell">无记录</td>
                         </tr>
                     <?php } ?>
-
+                    <?php $lian = \app\models\Service::hello($arr);?>
+                    <lable class="red">和值条件-》</lable>
+                    <lable class="red">连错：</lable><?php echo isset($lian[0])?$lian[0]:'0';?>期
+                    <lable class="red">连对：</lable><?php echo $lian[1];?>期
+                    <?php $count = array_count_values($arr);
+                    $odds = round( ($count[1]/count($arr)) * 100 , 2) . "％";
+                    ?>
+                    <lable class="red">胜率：</lable><?php echo $odds;?>
+                    <br>
+                    <?php $lian2 = \app\models\Service::hello($shunzi);?>
+                    <lable class="red">三连条件-》</lable>
+                    <lable class="red">连错：</lable><?php echo isset($lian2[0])?$lian2[0]:'0';?>期
+                    <lable class="red">连对：</lable><?php echo $lian2[1];?>期
+                    <?php $count2 = array_count_values($shunzi);
+                    $odds2 = round( ($count2[1]/count($shunzi)) * 100 , 2) . "％";
+                    ?>
+                    <lable class="red">胜率：</lable><?php echo $odds2;?>
                     </tbody>
                 </table>
                 <div class="pull-right">

@@ -75,6 +75,7 @@ class SiteController extends Controller
         $pages = new Pagination(['defaultPageSize' => $period, 'totalCount' => $count,'pageSizeLimit'=>$period]);
         $querylist->offset($pages->offset)->limit($pages->limit);
         $data = $querylist->all();
+        //所有的
         return $this->render("index",[
             'data'=>$data,
             'pages'=>$pages,

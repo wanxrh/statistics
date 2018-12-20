@@ -67,6 +67,63 @@ class Service
 
 
     }
+
+    public static function hello($array){
+        $res = array();
+        $temp = $array[0];
+        $is_chao_temp = 0;
+        $res[$array[0]] = 1;
+        foreach($array as $k=>$v){
+            if($k>0){
+                if($v==$temp){
+                    if($is_chao_temp!=0&&$is_chao_temp<$res[$v]){
+                        $is_chao_temp++;
+                    }else{
+                        $res[$v] +=1;
+                        $is_chao_temp=0;
+                    }
+
+                }else{
+                    $is_chao_temp = 0;
+                    if(!empty($res[$v])){
+                        $is_chao_temp++;
+
+                    }else{
+                        $res[$v] = 1;
+                    }
+
+                }
+                $temp = $v;
+
+
+            }
+        }
+        return $res;
+
+    }
+
+    /**
+     * @param $a
+     * @return bool true 顺子 false 非顺子
+     * @author lvlinlin <lvlinlin@tdnnic.org>
+     */
+    public static function shunza($a){
+        if ($a[0]+1==$a[1] && $a[1]+1==$a[2]) {
+            $shunzi = true;
+        } else {
+            if ($a[0] - 1 == $a[1] && $a[1] - 1 == $a[2]) {
+                $shunzi = true;
+            } else {
+                $shunzi = false;
+            }
+        }
+        return $shunzi;
+    }
+    /**
+     * @param $source
+     * @return string
+     * @author lvlinlin <lvlinlin@tdnnic.org>
+     */
     public static function xml_to_json($source) {
         if(is_file($source)){ //传的是文件，还是xml的string的判断
             $xml_array=simplexml_load_file($source);
