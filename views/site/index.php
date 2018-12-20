@@ -13,6 +13,7 @@
     .span{width: 50px; display: block;float: left;text-align: center}
     .color{ color: #b3b3b3;text-align: center;}
     td{text-align: center}
+    th{text-align: center}
     .container{width: 80%}
 </style>
 <div class="row">
