@@ -121,6 +121,7 @@
                     <?php $count = array_count_values($arr);
                     $odds = round( ($count[1]/count($arr)) * 100 , 2) . "％";
                     ?>
+                    <lable class="red">错：</lable><?php echo isset($count[0])?$count[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds;?>
                     <br>
                     <?php $lian2 = \app\models\Service::hello($shunzi);?>
@@ -130,6 +131,7 @@
                     <?php $count2 = array_count_values($shunzi);
                     $odds2 = round( ($count2[1]/count($shunzi)) * 100 , 2) . "％";
                     ?>
+                    <lable class="red">错：</lable><?php echo isset($count2[0])?$count2[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds2;?>
                     </tbody>
                 </table>
