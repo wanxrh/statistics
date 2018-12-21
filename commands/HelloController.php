@@ -90,12 +90,10 @@ class HelloController extends Controller
         $src .= '?_='.time();
         $json = file_get_contents(urldecode($src));
         $data = json_decode($json,true);
-
         if(!empty($data)){
             //foreach($data as $k=>$item){
                 //先查询数据库有没有
-                $kj_one = Yii::$app->db->createCommand("SELECT * FROM xy_data2 WHERE `number`='{$data['predrawcode']}'")->queryOne();
-                //print_r($kj_one);exit;
+                $kj_one = Yii::$app->db->createCommand("SELECT * FROM xy_data2 WHERE `number`='{$data['preissue']}'")->queryOne();
                 if(empty($kj_one)){
                     //当前数据库连接
                     $db = Yii::$app->db;
