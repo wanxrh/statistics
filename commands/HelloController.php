@@ -105,6 +105,7 @@ class HelloController extends Controller
                         'time'=>$data['predrawtime'],
                         'number'=>$data['preissue'],
                         'data'=>$data['predrawcode'],
+                        'first_three'=>substr($$data['predrawcode'],0,8),
                     ]);
                     $result_insert = $command->execute();
                     if($result_insert){
