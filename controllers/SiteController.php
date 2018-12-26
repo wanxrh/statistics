@@ -67,7 +67,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $period = Yii::$app->request->get('period','50');
+        $period = Yii::$app->request->get('period','100');
         $querylist = new Query();
         $querylist->select('*')->from('xy_data');
         $querylist->orderBy('number desc');

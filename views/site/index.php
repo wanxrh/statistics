@@ -72,8 +72,9 @@
                         <th colspan="10">开奖号码
                         </th>
                         <th>前三和值</th>
-                        <th>杀0607252627和值</th>
+                        <th>杀060723252627和值</th>
                         <th>形态</th>
+                        <th>0001111222路</th>
 
 
                     </tr>
@@ -95,7 +96,7 @@
                                         <td width="5%"><?php echo $val?></td>
                                     <?php }?>
                                 <?php };?>
-                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','25','26','27']?>
+                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','23','25','26','27']?>
                                 <td><?php echo $hezhi?></td>
                             <?php if(\app\models\Service::shunza([$kj_number[0],$kj_number[1],$kj_number[2]])){$shunzi[] = 0;}else{$shunzi[] = 1;}?>
                             <?php if(!in_array($hezhi,$hewei)){
@@ -109,6 +110,15 @@
                             <?php }?>
 
                                 <td><?php echo \app\models\Service::xingtai([$kj_number[0],$kj_number[1],$kj_number[2]])?></td>
+                                <?php if(\app\models\Service::x012($kj_number[0].' '.$kj_number[1].' '.$kj_number[2])){
+                                    $arr_012[] = 1;
+                                    ?>
+                                    <td><i class="icon-ok ">√</i></td>
+                                <?php }else{
+                                    $arr_012[] = 0;
+                                    ?>
+                                    <td><i class="icon-ok ">x</i></td>
+                                <?php }?>
                             </tr>
                         <?php } ?>
                     <?php } else {
@@ -137,6 +147,17 @@
                     ?>
                     <lable class="red">错：</lable><?php echo isset($count2[0])?$count2[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds2;?>
+
+                    <br>
+                    <?php $lian012 = \app\models\Service::hello($arr_012);?>
+                    <lable class="red">012条件-》</lable>
+                    <lable class="red">连错：</lable><?php echo isset($lian012[0])?$lian012[0]:'0';?>期
+                    <lable class="red">连对：</lable><?php echo $lian012[1];?>期
+                    <?php $count012 = array_count_values($arr_012);
+                    $odds012 = round( ($count012[1]/count($arr_012)) * 100 , 2) . "％";
+                    ?>
+                    <lable class="red">错：</lable><?php echo isset($count012[0])?$count012[0]:'0';?>期
+                    <lable class="red">胜率：</lable><?php echo $odds012;?>
                     </tbody>
                 </table>
                 <div class="pull-right">
