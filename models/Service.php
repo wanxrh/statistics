@@ -132,10 +132,10 @@ class Service
                 $value = substr($value,0,1);
             }
             if(in_array($value,$arr)){
-                $hewei = '<i class="icon-ok ">√</i>';
+                $hewei = true;
                 return $hewei;
             }else{
-                $hewei = '<i class="icon-ok ">x</i>';
+                $hewei = false;
             }
         }
         return $hewei;

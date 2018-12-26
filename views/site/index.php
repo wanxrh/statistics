@@ -111,7 +111,16 @@
                             <?php }?>
 
                                 <!--<td>--><?php //echo \app\models\Service::xingtai([$kj_number[0],$kj_number[1],$kj_number[2]])?><!--</td>-->
-                                <td><?php echo \app\models\Service::liangmahe([$kj_number[0],$kj_number[1],$kj_number[2]])?></td>
+                                <?php if(\app\models\Service::liangmahe([$kj_number[0],$kj_number[1],$kj_number[2]])){
+                                    $arr_hewei[] = 1;
+                                    ?>
+                                    <td><i class="icon-ok ">√</i></td>
+                                <?php }else{
+                                    $arr_hewei[] = 0;
+                                    ?>
+                                    <td><i class="icon-ok ">x</i></td>
+                                <?php }?>
+
                                 <?php if(\app\models\Service::x012($kj_number[0].' '.$kj_number[1].' '.$kj_number[2])){
                                     $arr_012[] = 1;
                                     ?>
@@ -149,6 +158,16 @@
                     ?>
                     <lable class="red">错：</lable><?php echo isset($count2[0])?$count2[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds2;?>
+                    <br>
+                    <?php $lianhewei = \app\models\Service::hello($arr_hewei);?>
+                    <lable class="red">两码和尾条件-》</lable>
+                    <lable class="red">连错：</lable><?php echo isset($lianhewei[0])?$lianhewei[0]:'0';?>期
+                    <lable class="red">连对：</lable><?php echo $lianhewei[1];?>期
+                    <?php $counthewei = array_count_values($arr_hewei);
+                    $oddshewei = round( ($counthewei[1]/count($arr_hewei)) * 100 , 2) . "％";
+                    ?>
+                    <lable class="red">错：</lable><?php echo isset($counthewei[0])?$counthewei[0]:'0';?>期
+                    <lable class="red">胜率：</lable><?php echo $oddshewei;?>
 
                     <br>
                     <?php $lian012 = \app\models\Service::hello($arr_012);?>
