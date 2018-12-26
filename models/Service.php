@@ -119,6 +119,27 @@ class Service
         }
         return $shunzi;
     }
+
+    /**
+     * 两码和尾
+     * @author lvlinlin <lvlinlin@tdnnic.org>
+     */
+    public static function liangmahe($array){
+        $arr = ['1','2','3','4'];
+        $he = [$array[0]+$array[1],$array[1]+$array[2],$array[0]+$array[2]];
+        foreach($he as $value){
+            if($value>9){
+                $value = substr($value,0,1);
+            }
+            if(in_array($value,$arr)){
+                $hewei = '<i class="icon-ok ">√</i>';
+                return $hewei;
+            }else{
+                $hewei = '<i class="icon-ok ">x</i>';
+            }
+        }
+        return $hewei;
+    }
     /**
      * @param $a
      * @return 下山号 上山号

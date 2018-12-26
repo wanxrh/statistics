@@ -73,7 +73,8 @@
                         </th>
                         <th>前三和值</th>
                         <th>杀060723252627和值</th>
-                        <th>形态</th>
+                        <!--<th>形态</th>-->
+                        <th>两码合尾1234</th>
                         <th>0001111222路</th>
 
 
@@ -109,7 +110,8 @@
                                 <td><i class="icon-ok ">x</i></td>
                             <?php }?>
 
-                                <td><?php echo \app\models\Service::xingtai([$kj_number[0],$kj_number[1],$kj_number[2]])?></td>
+                                <!--<td>--><?php //echo \app\models\Service::xingtai([$kj_number[0],$kj_number[1],$kj_number[2]])?><!--</td>-->
+                                <td><?php echo \app\models\Service::liangmahe([$kj_number[0],$kj_number[1],$kj_number[2]])?></td>
                                 <?php if(\app\models\Service::x012($kj_number[0].' '.$kj_number[1].' '.$kj_number[2])){
                                     $arr_012[] = 1;
                                     ?>
