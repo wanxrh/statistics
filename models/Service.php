@@ -129,7 +129,7 @@ class Service
         $he = [$array[0]+$array[1],$array[1]+$array[2],$array[0]+$array[2]];
         foreach($he as $value){
             if($value>9){
-                $value = substr($value,0,1);
+                $value = substr($value,1,1);
             }
             if(in_array($value,$arr)){
                 $hewei = true;
