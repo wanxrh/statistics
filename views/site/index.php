@@ -72,7 +72,7 @@
                         <th colspan="10">开奖号码
                         </th>
                         <th>前三和值</th>
-                        <th>杀09和尾+62527和值</th>
+                        <th>杀0607252627和值</th>
                         <th>形态</th>
 
 
@@ -95,7 +95,7 @@
                                         <td width="5%"><?php echo $val?></td>
                                     <?php }?>
                                 <?php };?>
-                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','09','10','19','20','25','27']?>
+                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','25','26','27']?>
                                 <td><?php echo $hezhi?></td>
                             <?php if(\app\models\Service::shunza([$kj_number[0],$kj_number[1],$kj_number[2]])){$shunzi[] = 0;}else{$shunzi[] = 1;}?>
                             <?php if(!in_array($hezhi,$hewei)){
