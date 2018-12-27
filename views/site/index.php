@@ -232,7 +232,7 @@
                     <lable class="red">错：</lable><?php echo isset($count012[0])?$count012[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds012;?>
                     <br>
-                    <lable class="red">条件连错<?php echo implode('-',$wrong_array);?>期</lable>
+                    <lable class="red">条件连错<?php echo implode('-',$wrong_array);?></lable>
                     </tbody>
                 </table>
                 <div class="pull-right">
