@@ -84,8 +84,13 @@
                     <?php if($data) {
                         $count = count($data);
                         $arr = [];
+                        $wrong_total = 0;
+                        $wrong_array = [];
                         ?>
-                        <?php foreach($data as $key=>$list) { ?>
+                        <?php foreach($data as $key=>$list) {
+                            //条件连错
+                            $Even_wrong = true;
+                            ?>
                             <tr>
                                 <td><?php echo $list['number'];?></td>
                                 <td><?php echo $list['time'];?></td>
@@ -97,41 +102,62 @@
                                         <td width="5%"><?php echo $val?></td>
                                     <?php }?>
                                 <?php };?>
-                                <?php //$hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','09','10','19','20','25','26','27']?>
-                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','08','23','25','26','27']?>
+                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','08','13','23','25','26','27']?>
                                 <td><?php echo $hezhi?></td>
-                            <?php if(\app\models\Service::shunza([$kj_number[0],$kj_number[1],$kj_number[2]])){$shunzi[] = 0;}else{$shunzi[] = 1;}?>
+                            <?php if(\app\models\Service::shunza([$kj_number[0],$kj_number[1],$kj_number[2]])){$shunzi[] = 0;$Even_wrong=false;}else{$shunzi[] = 1;}?>
                             <?php if(!in_array($hezhi,$hewei)){
                                 $arr[] = 1;
                                 ?>
                                 <td><i class="icon-ok ">√</i></td>
                             <?php }else{
                                 $arr[] = 0;
+                                $Even_wrong=false;
                                 ?>
-                                <td><i class="icon-ok ">x</i></td>
+                                <td><i class="icon-ok red">x</i></td>
                             <?php }?>
 
                                 <!--<td>--><?php //echo \app\models\Service::xingtai([$kj_number[0],$kj_number[1],$kj_number[2]])?><!--</td>-->
                                 <?php if(\app\models\Service::liangmahe([$kj_number[0],$kj_number[1],$kj_number[2]])){
                                     $arr_hewei[] = 1;
                                     ?>
-                                    <td><i class="icon-ok ">√</i></td>
+                                    <td><i class="icon-ok">√</i></td>
                                 <?php }else{
                                     $arr_hewei[] = 0;
+                                    $Even_wrong=false;
                                     ?>
-                                    <td><i class="icon-ok ">x</i></td>
+                                    <td><i class="icon-ok red">x</i></td>
                                 <?php }?>
 
                                 <?php if(\app\models\Service::x012($kj_number[0].' '.$kj_number[1].' '.$kj_number[2])){
                                     $arr_012[] = 1;
                                     ?>
-                                    <td><i class="icon-ok ">√</i></td>
+                                    <td><i class="icon-ok">√</i></td>
                                 <?php }else{
                                     $arr_012[] = 0;
+                                    $Even_wrong=false;
                                     ?>
-                                    <td><i class="icon-ok ">x</i></td>
+                                    <td><i class="icon-ok red">x</i></td>
                                 <?php }?>
                             </tr>
+                            <?php if(!$Even_wrong){
+                                $wrong_total++;
+                                //echo $wrong_total;exit;
+                            }else{
+                                if($wrong_total>0){
+                                    if($wrong_total>2) {
+                                        $wrong_array[$key] = $wrong_total . '(' . $list['number'] . ')期';
+                                        //$time = $list['time'];
+                                        //$path = Yii::$app->basePath;
+                                        //$content = $time . "\r\n";;  // 写入的内容
+                                        //$file = $path . "/test.txt";    // 写入的文件
+                                        //file_put_contents($file, $content, FILE_APPEND);
+                                    }
+                                    //}else{
+                                    //    $wrong_array[$key] = $wrong_total;
+                                    //}
+                                }
+                                $wrong_total = 0;
+                            }?>
                         <?php } ?>
                     <?php } else {
                         ?>
@@ -181,7 +207,7 @@
                     <lable class="red">错：</lable><?php echo isset($count012[0])?$count012[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds012;?>
                     <br>
-                    <lable class="red">条件连错期</lable>
+                    <lable class="red">条件连错<?php echo implode('-',$wrong_array);?>期</lable>
                     </tbody>
                 </table>
                 <div class="pull-right">
