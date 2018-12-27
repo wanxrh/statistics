@@ -72,9 +72,9 @@
                         <th colspan="10">开奖号码
                         </th>
                         <th>前三和值</th>
-                        <th>杀060709101920252627和值</th>
+                        <th>杀06071323252627和值</th>
                         <!--<th>形态</th>-->
-                        <th>两码合尾1234</th>
+                        <th>两码合尾012349</th>
                         <th>0001111222路</th>
 
 
@@ -97,7 +97,8 @@
                                         <td width="5%"><?php echo $val?></td>
                                     <?php }?>
                                 <?php };?>
-                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','09','10','19','20','25','26','27']?>
+                                <?php //$hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','09','10','19','20','25','26','27']?>
+                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','08','23','25','26','27']?>
                                 <td><?php echo $hezhi?></td>
                             <?php if(\app\models\Service::shunza([$kj_number[0],$kj_number[1],$kj_number[2]])){$shunzi[] = 0;}else{$shunzi[] = 1;}?>
                             <?php if(!in_array($hezhi,$hewei)){
@@ -179,6 +180,8 @@
                     ?>
                     <lable class="red">错：</lable><?php echo isset($count012[0])?$count012[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds012;?>
+                    <br>
+                    <lable class="red">条件连错期</lable>
                     </tbody>
                 </table>
                 <div class="pull-right">

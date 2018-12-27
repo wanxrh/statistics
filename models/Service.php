@@ -125,19 +125,27 @@ class Service
      * @author lvlinlin <lvlinlin@tdnnic.org>
      */
     public static function liangmahe($array){
-        $arr = ['1','2','3','4'];
+        $arr = ['0','1','2','3','4','9'];
         $he = [$array[0]+$array[1],$array[1]+$array[2],$array[0]+$array[2]];
+        //$tj = '';
         foreach($he as $value){
             if($value>9){
                 $value = substr($value,1,1);
             }
             if(in_array($value,$arr)){
+                //$tj = '';
                 $hewei = true;
                 return $hewei;
             }else{
+                //$tj.= $value.',';
                 $hewei = false;
             }
         }
+        //$tj = substr($tj,0,-1);
+        //$path=Yii::$app->basePath;
+        //$content = $tj."\r\n";;  // 写入的内容
+        //$file = $path."/test.txt";    // 写入的文件
+        //file_put_contents($file,$content,FILE_APPEND);
         return $hewei;
     }
     /**
