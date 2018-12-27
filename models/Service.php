@@ -113,6 +113,14 @@ class Service
         } else {
             if ($a[0] - 1 == $a[1] && $a[1] - 1 == $a[2]) {
                 $shunzi = true;
+            }elseif($a[0] + 1 == $a[1] && $a[1] - 2 == $a[2]){
+                $shunzi = true;
+            }elseif($a[0] + 2 == $a[1] && $a[1] - 1 == $a[2]){
+                $shunzi = true;
+            }elseif($a[0] - 1 == $a[1] && $a[1] + 2 == $a[2]){
+                $shunzi = true;
+            }elseif($a[0] - 2 == $a[1] && $a[1] + 1 == $a[2]){
+                $shunzi = true;
             } else {
                 $shunzi = false;
             }
