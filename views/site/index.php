@@ -73,6 +73,7 @@
                         </th>
                         <th>前三和值</th>
                         <th>杀06071323252627和值</th>
+                        <th>杀09101920和值</th>
                         <!--<th>形态</th>-->
                         <th>两码合尾012349</th>
                         <th>0001111222路</th>
@@ -86,6 +87,8 @@
                         $arr = [];
                         $wrong_total = 0;
                         $wrong_array = [];
+                        $hewei=['06','07','08','13','23','25','26','27'];
+                        $hewei2=['09','10','19','20'];
                         ?>
                         <?php foreach($data as $key=>$list) {
                             //条件连错
@@ -102,7 +105,7 @@
                                         <td width="5%"><?php echo $val?></td>
                                     <?php }?>
                                 <?php };?>
-                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];$hewei=['06','07','08','13','23','25','26','27']?>
+                                <?php $hezhi=$kj_number[0]+$kj_number[1]+$kj_number[2];?>
                                 <td><?php echo $hezhi?></td>
                             <?php if(\app\models\Service::shunza([$kj_number[0],$kj_number[1],$kj_number[2]])){$shunzi[] = 0;$Even_wrong=false;}else{$shunzi[] = 1;}?>
                             <?php if(!in_array($hezhi,$hewei)){
@@ -112,6 +115,16 @@
                             <?php }else{
                                 $arr[] = 0;
                                 $Even_wrong=false;
+                                ?>
+                                <td><i class="icon-ok red">x</i></td>
+                            <?php }?>
+                            <!--09合尾-->
+                            <?php if(!in_array($hezhi,$hewei2)){
+                                $arr_09[] = 1;
+                                ?>
+                                <td><i class="icon-ok ">√</i></td>
+                            <?php }else{
+                                $arr_09[] = 0;
                                 ?>
                                 <td><i class="icon-ok red">x</i></td>
                             <?php }?>
@@ -176,6 +189,18 @@
                     <lable class="red">错：</lable><?php echo isset($count[0])?$count[0]:'0';?>期
                     <lable class="red">胜率：</lable><?php echo $odds;?>
                     <br>
+                    <!--09和尾-->
+                    <?php $lian09 = \app\models\Service::hello($arr_09);?>
+                    <lable class="red">09和尾条件-》</lable>
+                    <lable class="red">连错：</lable><?php echo isset($lian09[0])?$lian09[0]:'0';?>期
+                    <lable class="red">连对：</lable><?php echo $lian09[1];?>期
+                    <?php $count09 = array_count_values($arr_09);
+                    $odds09 = round( ($count09[1]/count($arr_09)) * 100 , 2) . "％";
+                    ?>
+                    <lable class="red">错：</lable><?php echo isset($count09[0])?$count09[0]:'0';?>期
+                    <lable class="red">胜率：</lable><?php echo $odds09;?>
+                    <br>
+
                     <?php $lian2 = \app\models\Service::hello($shunzi);?>
                     <lable class="red">三连条件-》</lable>
                     <lable class="red">连错：</lable><?php echo isset($lian2[0])?$lian2[0]:'0';?>期
